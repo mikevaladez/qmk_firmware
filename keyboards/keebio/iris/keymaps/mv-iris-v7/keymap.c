@@ -1,0 +1,81 @@
+#include QMK_KEYBOARD_H
+#ifdef RGB_MATRIX_ENABLE
+#    include "rgb_matrix.h"
+#endif
+
+
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+	[0] = LAYOUT(
+	//--------------------------------------------------------------/              		             \--------------------------------------------------------------------
+	   KC_GRV,	  KC_1,   KC_2,   KC_3, 		 		KC_4,   KC_5, 						          KC_6,    KC_7,   KC_8,                 KC_9,     KC_0,      KC_MINS, 
+	//--------------------------------------------------------------/            			         \--------------------------------------------------------------------
+	   KC_TAB,    KC_Q,   KC_W,   KC_E,        	        KC_R,   KC_T, 						          KC_Y,    KC_U,   KC_I,                 KC_O,     KC_P,      KC_BSLS, 
+	//--------------------------------------------------------------/              		   	         \--------------------------------------------------------------------
+	   KC_LGUI,   KC_A,   KC_S,   MT(MOD_LSFT, KC_D),   KC_F,   KC_G, 					              KC_H,    KC_J,   MT(MOD_RSFT, KC_K),   KC_L,     KC_SCLN,   KC_QUOT, 
+	//----------------------------------------------------------------------/  			 \--------------------------------------------------------------------------------
+	   KC_LCTL,   KC_Z,   KC_X,   KC_C, 				KC_V,   KC_B,   MO(1), 				 MO(1),   KC_N,    KC_M,   KC_COMM,              KC_DOT,   KC_SLSH,   KC_EQL,
+	//----------------------------------------------------------------------/            \-------------------------------------------------------------------------------
+											     KC_LALT, KC_LSFT, KC_SPC,   	         KC_ENT,  KC_RSFT, TO(1)						
+										      //----------------------------/            \-----------------------
+	),
+	[1] = LAYOUT(	
+	//-------------------------------------------------------------------------------------/          						\--------------------------------------------------------------
+	   KC_F1,       KC_F2,      KC_F3,          KC_F4,     KC_F5,            KC_F6, 				  	  					 KC_F7,     KC_F8,     KC_F9,     KC_F10,    KC_F11,    KC_F12, 
+	//-------------------------------------------------------------------------------------/           						\--------------------------------------------------------------
+	   KC_PLUS,     KC_MINUS,   KC_BACKSLASH,   KC_SLSH,   KC_LEFT_PAREN,    KC_RIGHT_PAREN, 		  	  					 KC_PGUP,   KC_DEL,    KC_UP,     KC_BSPC,   KC_INS,    KC_PIPE, 
+	//-------------------------------------------------------------------------------------/           						\--------------------------------------------------------------
+	   KC_ASTERISK, KC_SLASH,   KC_LCBR, 	    KC_RCBR,   KC_LEFT_BRACKET,  KC_RIGHT_BRACKET, 							     KC_PGDN,   KC_LEFT,   KC_DOWN,   KC_RGHT,   KC_PSCR,   KC_NO, 
+	//-------------------------------------------------------------------------------------------------/  		   \-----------------------------------------------------------------------
+	   KC_PEQL,     KC_NO,      KC_NO,    		KC_NO,     KC_NO,            KC_NO,              MO(0), 		   	MO(0),   KC_PEQL,   KC_HOME,   KC_DOWN,   KC_END,    KC_MINS,   KC_EQL, 
+	//-------------------------------------------------------------------------------------------------/           \-----------------------------------------------------------------------
+																		  TO(0),    TO(2),      TO(2), 				KC_DEL,   KC_NO,   KC_NO
+																		//----------------------------/            \-------------------------
+	),
+	[2] = LAYOUT(
+	//---------------------------------------------------------------------------------/              		             \-------------------------------------------------------------
+	KC_F1,   KC_F2,                 KC_F3,     KC_F4,     KC_F5,     KC_F6, 											  KC_F7,    KC_F8,     KC_F9,     KC_F10,    KC_F11,    KC_F12, 
+	//---------------------------------------------------------------------------------/              		             \-------------------------------------------------------------
+	KC_NO,   QK_MOUSE_WHEEL_UP,     KC_UP,     KC_PGUP,   KC_HOME,   QK_MOUSE_BUTTON_1,						    		  KC_GRV,   KC_PLUS,   KC_LPRN,   KC_LCBR,   KC_LBRC,   KC_BSLS, 								
+	//---------------------------------------------------------------------------------/              		            \--------------------------------------------------------------
+	KC_NO,   QK_MOUSE_WHEEL_DOWN,   KC_DOWN,   KC_PGDN,   KC_END,    QK_MOUSE_BUTTON_2, 					   			 TT(2),     KC_PEQL,   KC_RPRN,   KC_RCBR,   KC_RBRC,   KC_SLSH, 								
+	//------------------------------------------------------------------------------------------/  			 \-------------------------------------------------------------------------
+	KC_NO,   KC_NO,                 KC_NO,     KC_NO,     KC_NO,     KC_NO,              KC_NO, 			   MO(0), 	 KC_PEQL,   KC_HOME,   KC_DOWN,   KC_END,    KC_MINS,   KC_EQL, 
+	//------------------------------------------------------------------------------------------/            \------------------------------------------------------------------------
+																	TO(0),    TO(1),    KC_NO, 				  KC_NO,    KC_NO,     KC_NO
+																  //----------------------------/            \--------------------------
+	)
+};
+
+
+
+#ifdef RGB_MATRIX_ENABLE
+
+static HSV layer_to_hsv(uint8_t layer) {
+    switch (layer) {
+        case 0: return (HSV){HSV_BLUE};
+        case 1: return (HSV){HSV_GREEN};
+        case 2: return (HSV){HSV_PURPLE};
+        case 3: return (HSV){HSV_AZURE};
+        default: return (HSV){HSV_BLUE};
+    }
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    // Keep your split layer sync hook working
+    return state;
+}
+
+bool rgb_matrix_indicators_user(void) {
+    if (!rgb_matrix_is_enabled()) {
+        return false;
+    }
+
+    uint8_t layer = get_highest_layer(layer_state);
+    HSV hsv = layer_to_hsv(layer);
+
+    // Set global matrix color (solid color mode will show this)
+    rgb_matrix_sethsv(hsv.h, hsv.s, hsv.v);
+    return false;
+}
+
+#endif
