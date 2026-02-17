@@ -32,3 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Sync layer state across halves
 #define SPLIT_LAYER_STATE_ENABLE
+
+// TT(layer) - Layer Tap-Toggle.
+#define TAPPING_TOGGLE 2
