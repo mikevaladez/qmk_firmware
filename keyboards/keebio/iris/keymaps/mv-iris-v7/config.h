@@ -35,3 +35,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // TT(layer) - Layer Tap-Toggle.
 #define TAPPING_TOGGLE 2
+
+//#define NO_DEBUG                 // Disables debug prints entirely
+//#define NO_PRINT                 // Disables print/xprintf statements
+#define NO_ACTION_MACRO          // Disables old macro execution
+#define NO_ACTION_FUNCTION       // Disables function actions
+#define DISABLE_LEADER           // Disables leader key functionality
+#define LAYER_STATE_8BIT         // Limit to 8 layers
