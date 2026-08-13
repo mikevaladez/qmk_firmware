@@ -1,0 +1,5 @@
+SRC += source.c
+
+RGB_MATRIX_ENABLE = yes
+MOUSEKEY_ENABLE = yes
+RGBLIGHT_ENABLE = no
